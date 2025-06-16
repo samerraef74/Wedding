@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>User Chat</title>
+</head>
+<body>
+  <h1>Welcome to the Chat, <%= user.name %>!</h1>
+  <form id="chatForm">
+    <input type="text" id="message" placeholder="Ask something..." required>
+    <button type="submit">Send</button>
+  </form>
+  <div id="response"></div>
+
+  <script>
+    document.getElementById("chatForm").onsubmit = async (e) => {
+      e.preventDefault();
+      const msg = document.getElementById("message").value;
+
+      const res = await fetch("/user/chat/<%= user._id %>", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: msg })
+      });
+
+      const data = await res.json();
+      document.getElementById("response").innerText = data.reply;
+    };
+  </script>
+</body>
+</html>
